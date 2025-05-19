@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const Login = () => {
-    const URL = import.meta.env.VITE_BASE_URL
+  const URL = import.meta.env.VITE_BASE_URL;
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
@@ -22,7 +22,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch('http://localhost:5000/api/login', {
+        const response = await fetch(`${URL}/api/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

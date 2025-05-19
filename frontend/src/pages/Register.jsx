@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 
 const Register = () => {
     const navigate = useNavigate();
+    const URL = import.meta.env.VITE_BASE_URL;
     const [formData, setFormData] = useState({
         name: "",
         email: "",
@@ -22,7 +23,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:5000/api/register", {
+            const response = await fetch(`${URL}/api/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
