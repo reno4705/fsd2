@@ -34,7 +34,6 @@ const Register = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                // Specific check for email already registered
                 if (response.status === 409) {
                     toast.error("Email already registered");
                 } else {

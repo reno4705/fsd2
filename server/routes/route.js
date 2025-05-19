@@ -19,9 +19,10 @@ route.post("/register", async (req, res) => {
             .from("Users")
             .select("id")
             .eq("email", email)
-            .single();
+            .maybeSingle();
 
         if (findError) {
+            console.log(findError);
             return res
                 .status(500)
                 .json({ error: "Database error while checking email" });

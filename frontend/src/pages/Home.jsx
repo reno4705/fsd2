@@ -84,7 +84,7 @@ const Home = () => {
     const deleteTask = async (id) => {
         try {
             const response = await fetch(
-                `http://localhost:5000/api/tasks/${id}`,
+                `${URL}/api/tasks/${id}`,
                 {
                     method: "DELETE",
                     credentials: "include",
