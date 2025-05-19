@@ -10,11 +10,6 @@ const Register = () => {
         email: "",
         password: "",
     });
-    const [errors, setErrors] = useState({
-        name: "",
-        email: "",
-        password: "",
-    });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -22,77 +17,38 @@ const Register = () => {
             ...prev,
             [name]: value,
         }));
-
-        if (errors[name]) {
-            setErrors((prev) => ({
-                ...prev,
-                [name]: "",
-            }));
-        }
-    };
-
-    const validate = () => {
-        let isValid = true;
-        const newErrors = {
-            name: "",
-            email: "",
-            password: "",
-        };
-
-        if (!formData.name.trim()) {
-            newErrors.name = "Name is required";
-            isValid = false;
-        }
-
-        if (!formData.email.trim()) {
-            newErrors.email = "Email is required";
-            isValid = false;
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = "Email is invalid";
-            isValid = false;
-        }
-
-        if (!formData.password) {
-            newErrors.password = "Password is required";
-            isValid = false;
-        } else if (formData.password.length < 6) {
-            newErrors.password = "Password must be at least 6 characters";
-            isValid = false;
-        }
-
-        setErrors(newErrors);
-        return isValid;
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
-        if (validate()) {
-            try {
-                const response = await fetch("http://localhost:5000/api/register", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(formData),
-                });
-    
-                const data = await response.json();
-    
-                if (!response.ok) {
-                    throw new Error(data.error || "Failed to register");
+        try {
+            const response = await fetch("http://localhost:5000/api/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                // Specific check for email already registered
+                if (response.status === 409) {
+                    toast.error("Email already registered");
+                } else {
+                    toast.error(data.error || "Registration failed");
                 }
-    
-                // alert("Registration successful!");
-                toast.success("Registration successful!")
-                navigate("/login");
-            } catch (error) {
-                console.error("Registration error:", error.message);
-                alert(error.message);
+                return;
             }
+
+            toast.success("Registration successful!");
+            navigate("/login");
+        } catch (error) {
+            console.error("Registration error:", error.message);
+            toast.error("Something went wrong. Please try again later.");
         }
     };
-    
 
     return (
         <div className="">
@@ -125,11 +81,7 @@ const Register = () => {
                                     onChange={handleChange}
                                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 />
-                                {errors.name && (
-                                    <p className="mt-1 text-xs text-red-600">
-                                        {errors.name}
-                                    </p>
-                                )}
+                                
                             </div>
                         </div>
 
@@ -150,11 +102,7 @@ const Register = () => {
                                     onChange={handleChange}
                                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 />
-                                {errors.email && (
-                                    <p className="mt-1 text-xs text-red-600">
-                                        {errors.email}
-                                    </p>
-                                )}
+                                
                             </div>
                         </div>
 
@@ -175,11 +123,7 @@ const Register = () => {
                                     onChange={handleChange}
                                     className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                                 />
-                                {errors.password && (
-                                    <p className="mt-1 text-xs text-red-600">
-                                        {errors.password}
-                                    </p>
-                                )}
+                                
                             </div>
                         </div>
 

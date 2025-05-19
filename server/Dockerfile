@@ -1,5 +1,4 @@
-# Backend Dockerfile
-FROM node:20-alpine
+FROM node:18
 
 WORKDIR /app
 
@@ -9,6 +8,7 @@ RUN npm install
 COPY . .
 
 ENV PORT=5000
+
 EXPOSE 5000
 
-CMD ["node", "server.js"]
+CMD ["nodemon", "server.js"]

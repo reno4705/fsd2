@@ -1,32 +1,28 @@
 version: '3.8'
 
 services:
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - '5173:5173'
-    env_file:
-      - ./frontend/.env
-    volumes:
-      - ./frontend:/app
-    networks:
-      - app-network
-
   backend:
-    build:
-      context: ./server
-      dockerfile: Dockerfile
+    build: ./server
+    container_name: backend
     ports:
-      - '5000:5000'
-    env_file:
-      - ./server/.env
+      - "5000:5000"
+    environment:
+      SUPABASE_URL: https://jdakddbhajsrmqelzrwn.supabase.co
+      SUPABASE_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpkYWtkZGJoYWpzcm1xZWx6cnduIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDczNzY1MTQsImV4cCI6MjA2Mjk1MjUxNH0.QtkQNusBQjpOsgVsNLOiv8ciuLrGpG2BBdLtRi18Jqo
+      PORT: 5000
     volumes:
       - ./server:/app
-    networks:
-      - app-network
+    restart: unless-stopped
 
-networks:
-  app-network:
-    driver: bridge
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:5000
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+    restart: unless-stopped

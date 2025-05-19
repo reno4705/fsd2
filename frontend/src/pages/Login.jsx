@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const URL = import.meta.env.VITE_BASE_URL
@@ -30,13 +31,15 @@ const Login = () => {
             credentials: 'include'
         })
         if (response.ok) {
-            alert('Login successful!');
-            console.log("logged in");
+            toast.success("Login successful!")
+            // alert('Login successful!');
             console.log(response);
             navigate("/dashboard");
         }
         else {
-            console.log(response);
+            const res = await response.json();
+            toast.error(res.error);
+            console.log(res.error);
         }
     } catch (error) {
         console.log("Error:"+error);
