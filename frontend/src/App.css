@@ -1,0 +1,7 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 2rem;
+}
+.line-through {
+    text-decoration: line-through;
+}
